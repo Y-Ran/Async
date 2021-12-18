@@ -1,47 +1,15 @@
 package com.yiran.async.node;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import com.yiran.async.handler.HeadHandler;
 
-public class HeadNode<T> extends AbstractNode<T> {
+public class HeadNode<OUT> extends AbstractNode<OUT, OUT> {
 
-    private final T t;
+    private final OUT t;
 
-    public HeadNode(T t) {
-        super();
+    public HeadNode(OUT t) {
+        super(null, new HeadHandler<>(t));
         this.t = t;
         head = this;
     }
 
-    @Override
-    public Future<T> get() throws ExecutionException {
-        return new Future<T>() {
-            @Override
-            public boolean cancel(boolean mayInterruptIfRunning) {
-                return false;
-            }
-
-            @Override
-            public boolean isCancelled() {
-                return false;
-            }
-
-            @Override
-            public boolean isDone() {
-                return true;
-            }
-
-            @Override
-            public T get() throws InterruptedException, ExecutionException {
-                return t;
-            }
-
-            @Override
-            public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-                return t;
-            }
-        };
-    }
 }

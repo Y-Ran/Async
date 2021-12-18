@@ -1,26 +1,17 @@
 package com.yiran.async.handler;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class MapHandler<T, R> implements Handler<T, R> {
+public class MapHandler<OUT, IN> implements Handler<OUT, IN> {
 
-    private final ExecutorService executorService;
+    private final Function<IN, OUT> function;
 
-    private final Supplier<Future<T>> futureSupplier;
-
-    public MapHandler(ExecutorService executorService, Supplier<Future<T>> futureSupplier) {
-        this.executorService = executorService;
-        this.futureSupplier = futureSupplier;
+    public MapHandler(Function<IN, OUT> function) {
+        this.function = function;
     }
 
     @Override
-    public Future<R> handle(Function<T, R> function) {
-        return executorService.submit(() -> {
-            T t = this.futureSupplier.get().get();
-            return function.apply(t);
-        });
+    public OUT handle(IN in) {
+        return this.function.apply(in);
     }
 }

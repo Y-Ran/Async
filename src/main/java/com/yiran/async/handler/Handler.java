@@ -1,10 +1,9 @@
 package com.yiran.async.handler;
 
-import java.util.concurrent.Future;
 import java.util.function.Function;
 
-public interface Handler<T, R> {
+public interface Handler<OUT, IN> {
 
-    Future<R> handle(Function<T, R> function);
+    OUT handle(IN in);
 
 }
